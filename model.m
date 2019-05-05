@@ -40,4 +40,21 @@ D = 0;
 sys = ss(A,B,C,D,h);
 tspan = 0:0.1:10;
 
-lsim(A-B*K,zeros(1,length(tspan)),tspan,x0)
+x0 = [0.5;0;0.05;0];
+eigs = 5*[-1.1,-1.2,-1.3,-1.4];
+K = place(A,B,eigs);
+
+newsys = ss(A-B*K,[0;0;0;0],C,D);
+
+Y = lsim(newsys,zeros(length(tspan),1),tspan,x0);
+
+%%
+for k = 1:length(Y)
+    pendulum_draw(Y(k,:),M,m,L);
+    if k==1
+        pause(5)
+    else
+        pause(0.2)
+    end
+    drawnow 
+end
