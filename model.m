@@ -38,6 +38,6 @@ C = [1,0,0,0;0,0,1,0];
 D = 0;
 
 sys = ss(A,B,C,D,h);
-tspan = 0:0.01:10;
+tspan = 0:0.1:10;
 
-lsim(A-B*K,zeros(length(tspan)),tspan)
+lsim(A-B*K,zeros(1,length(tspan)),tspan,x0)
