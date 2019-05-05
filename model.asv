@@ -1,7 +1,6 @@
 M = 0.5;
 m = 0.2;
 b = 0.1;
-d = 1;
 I = 0.006;
 g = 9.8;
 l = 0.3;
@@ -23,21 +22,4 @@ set(sys_tf,'OutputName',outputs)
 sys_tf = c2d(sys_tf,0.1);
 
 %% Second system
-h=0.1;
-M = 0.5;
-m = 0.2;
-b = 0.1;
-d = 1;
-I = 0.006;
-g = 9.8;
-L = 0.3;
-
-A = [0,1,0,0;0,-d/M, -m*g/M,0;0,0,0,1;0,-d/(M*L), (m+M)*g/(M*L),0];
-B = [0;1/M;0;1/(M+L)];
-C = [1,0,0,0;0,0,1,0];
-D = 0;
-
-sys = ss(A,B,C,D,h);
-tspan = 0:0.01:10;
-
-lsim(A-B*K,zeros(length(tspan)),tspan)
+A = [0,1,0,0;0,-d/M, -m*g/M,0;0,0,0,1;0,-d/(M*L), (m+M)*g/(M*L),0]

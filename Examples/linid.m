@@ -7,9 +7,9 @@ x0 = [2;0]; % state at the operating point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % linearize nonlinear model around x0, u0
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[x0,u0,y0] = trim('nlsys',x0,[],[],1);
-[A,B,C,D] = linmod('nlsys',x0,u0);
-G = ss(A,B,C,D);
+% [x0,u0,y0] = trim('nlsys',x0,[],[],1);
+% [A,B,C,D] = linmod('nlsys',x0,u0);
+% G = ss(A,B,C,D);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % design input excitation signal
@@ -19,6 +19,8 @@ h = 0.1;    % sampling interval
 ts = 10;    % estimated settling time of the process
 A = 0.1;    % amplitude of GBN
 U = [h*(0:T/h)' gbn(T,ts,A,h,1)];
+
+%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % data collection
