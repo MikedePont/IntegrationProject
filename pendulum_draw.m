@@ -17,7 +17,7 @@ rectangle('Position',[wx,wy,C_width,C_height],'Curvature',.1,'FaceColor',[1 0.1 
 
 rectangle('Position',[px-S_radius,py-S_radius,S_radius*2,S_radius*2],'Curvature',1,'FaceColor',[.1 0.1 1])
 xlim([-2 2]);
-ylim([0 1]);
-pbaspect([4,1,1]);
+ylim([-1 1]);
+pbaspect([2,1,1]);
 hold off
 end
