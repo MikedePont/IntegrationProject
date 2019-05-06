@@ -1,0 +1,18 @@
+function sys = pend_dynamics(mc,mp,g,L,h)
+syms y1 y2 y3 y4 u
+% dy(1,1) = y2;
+% dy(2,1) = (1/(sin(y3)^2*mp + mc))*(u+mp*g*cos(y3)*sin(y3) - mp*L*y4^2*sin(y3));
+% dy(3,1) = y4;
+% dy(4,1) = (g*sin(y3) + (cos(y3)*(-L*mp*sin(y3)*y4^2 + u + g*mp*cos(y4)*sin(y3)))/(mp*sin(y3)^2 + mc))/L;
+
+
+
+V = [y1,y2,y3,y4];
+U = u;
+
+A = double(subs(jacobian(dy,V),[U,V],zeros(1,5)));
+B = double(subs(jacobian(dy,U),[U,V],zeros(1,5)));
+C = [1,0,0,0;0,0,1,0];
+D = 0;
+
+sys = c2d(ss(A,B,C,D),h);
