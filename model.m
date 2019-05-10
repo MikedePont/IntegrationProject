@@ -92,4 +92,13 @@ legend('Estimated','Measured')
 hold off
 
 %% Linearized system
-sys = lin_pend_dynamics(mc,mp,g,L,h,d_cart,d_pend,vel_factor, angvel_factor);
+id_pend = lin_pend_dynamics(mc,mp,g,L,h,Km,d_cart,d_pend,vel_factor, angvel_factor);
+
+tspan = 0:1:30;
+eigs = 2*[-1.1,-1.2,-1.3,-1.4];
+
+K = place(id_pend.A,id_pend.B,eigs);
+
+CL_id_pend = ss(id_pend.A-id_pend.B*K,[0;0;0;0],id_pend.C,id_pend.D);
+
+Y = lsim(CL_id_pend,zeros(length(tspan),1),tspan,x0);

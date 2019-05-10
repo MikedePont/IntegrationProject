@@ -1,8 +1,8 @@
-function sys = lin_pend_dynamics(mc,mp,g,L,h,d_cart,d_pend,vel_factor,angvel_factor)
+function sys = lin_pend_dynamics(mc,mp,g,L,h,Km,d_cart,d_pend,vel_factor,angvel_factor)
 syms y1 y2 y3 y4 u
 
 dy(1,1) = y2;
-dy(2,1) = (1/(mp*sin(y3)^2+mc))*(u-mp*L*y4^2*sin(y3)-d_cart*y2) + vel_factor;
+dy(2,1) = (1/(mp*sin(y3)^2+mc))*(Km*u-mp*L*y4^2*sin(y3)-d_cart*y2) + vel_factor;
 dy(3,1) = y4;
 dy(4,1) = (1/L)*(dy(2,1)*cos(y3)+g*sin(y3))-d_pend*y4 +angvel_factor;
 
