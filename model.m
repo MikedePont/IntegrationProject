@@ -73,12 +73,6 @@ hold on
 plot(out.pos)
 legend('Estimated','Measured')
 hold off
-
-for i = 1:length(out.pos)-10
-    difference(i) = (y(1,i) - out.pos(i));
-end
-figure(2)
-plot(difference)
 %%
 X = lsqnonlin(@(x)pend_par(x,mp,mc,Km,L,d_cart,g,h),[1,1],[0;0],[]);
 d_pend = X(1);
@@ -102,3 +96,4 @@ K = place(id_pend.A,id_pend.B,eigs);
 CL_id_pend = ss(id_pend.A-id_pend.B*K,[0;0;0;0],id_pend.C,id_pend.D);
 
 Y = lsim(CL_id_pend,zeros(length(tspan),1),tspan,x0);
+
