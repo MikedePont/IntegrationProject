@@ -100,12 +100,10 @@ Y = lsim(CL_id_pend,zeros(length(tspan),1),tspan,x0);
 %% Via ARMAX
 tspan = 0:0.01:70;
 [sys,x0,data] = getArmax(h);
-sys2 = n4sid(data,2);
+sys2 = n4sid(data,4
     %%
 Y = lsim(sys,Input_Voltage.data(1:7001),tspan,x0);
-Y2 = lsim(sys2,Input_Voltage.data(1:7001),tspan,x0);
 plot(Y);
 hold on
-plot(Y2);
 plot(Pos_Pendulum.data);
 legend('Estimated output','Real output')
