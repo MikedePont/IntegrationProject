@@ -21,20 +21,16 @@ pend = [-0.573,-0.5590,-0.4870,-0.4180,-0.3530,-0.29,-0.225,-0.16,-0.094,-0.0247
 
 
 %%
-T_final = 1;
+T_final = 1
 
 u_time = linspace(0,1,10);
-u_out = 0.*u_time;
+o_out = 0.*u_time;
 x_init = zeros(4,1);
 sim('pendtemplate')
 
 %%
-T_final = 30;
+T_final = 30
 
-x_init = [Pos_Pendulum.data(10),0,Angle_Pendulum.data(10),0];
+x_init = []
 u_time = linspace(0,30,1000);
 u_out = 0.3*sin(u_time);
-
-sim('pendtemplate')
-%%
-save('runs/run_no_rod_1')

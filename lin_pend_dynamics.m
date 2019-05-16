@@ -1,4 +1,4 @@
-function sys = lin_pend_dynamics(mc,mp,g,L,h,Km,d_cart,d_pend)
+function sys = lin_pend_dynamics(mc,mp,g,L,h,Km,d_cart,d_pend,vel_factor, angvel_factor)
 syms y1 y2 y3 y4 u
 
 dy(1,1) = y2;

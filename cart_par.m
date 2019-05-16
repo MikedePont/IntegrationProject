@@ -3,7 +3,7 @@ d_cart  = x(1);
 Km = x(2);
 factor = x(3);
 
-load('runs/run_without_rod_offset.mat','Input_Voltage','Pos_Pendulum');
+load('runs/run_no_rod_1.mat','Input_Voltage','Pos_Pendulum');
 
 inpu = Input_Voltage.data;
 out.pos = Pos_Pendulum.data;

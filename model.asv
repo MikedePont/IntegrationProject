@@ -1,6 +1,8 @@
-clear all
+%clear all 
 close all
 clc
+
+
 %% Parameters
 mc = 0.49;
 mp = 0.085;
@@ -12,10 +14,11 @@ I = 1/3*mp*L^2;
 g = 9.8;
 h = 0.01;
 x0 = [0.5;0;-0.5;0];
+Km = 1;
 
 %%
 
-lin_pend = lin_pend_dynamics(mc,mp,g,L,h,d_cart,d_pend);
+lin_pend = lin_pend_dynamics(mc,mp,g,L,h,Km,d_cart,d_pend,vel_factor,angvel_factor);
 tspan = 0:0.1:70;
 
 
@@ -40,7 +43,7 @@ for z = 1:length(yout)
 end
 
 %% 
-load('run/run_11.mat','simout');
+load('runs/run_11.mat','simout');
 id_pend = sys_id(simout,h);
 
 eigs = 2*[-1.1,-1.2,-1.3,-1.4];
@@ -85,25 +88,15 @@ plot(angle)
 legend('Estimated','Measured')
 hold off
 
-%% Linearized system
-id_pend = lin_pend_dynamics(mc,mp,g,L,h,Km,d_cart,d_pend,vel_factor, angvel_factor);
-
-tspan = 0:1:30;
-eigs = 2*[-1.1,-1.2,-1.3,-1.4];
-
-K = place(id_pend.A,id_pend.B,eigs);
-
-CL_id_pend = ss(id_pend.A-id_pend.B*K,[0;0;0;0],id_pend.C,id_pend.D);
-
-Y = lsim(CL_id_pend,zeros(length(tspan),1),tspan,x0);
-
-%% Via ARMAX
-tspan = 0:0.01:70;
-[sys,x0,data] = getArmax(h);
-sys2 = n4sid(data,4
-    %%
-Y = lsim(sys,Input_Voltage.data(1:7001),tspan,x0);
-plot(Y);
-hold on
-plot(Pos_Pendulum.data);
-legend('Estimated output','Real output')
+%%
+x0 = [0;0;0.5;0];
+[tout,yout] = ode45(@(t,y)nl_pend_dynamics(y,mc,mp,g,L,0,d_cart,d_pend,Km),tspan,x0);
+for z = 1:length(yout)
+    pendulum_draw(yout(z,[1,3]),mc,mp,L)
+    if z==1
+        pause(1)
+    else
+        pause(h)
+    end
+    drawnow
+end
