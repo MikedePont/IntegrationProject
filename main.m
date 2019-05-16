@@ -33,7 +33,7 @@ T_final = 30;
 
 x_init = [Pos_Pendulum.data(10),0,Angle_Pendulum.data(10),0];
 u_time = linspace(0,30,1000);
-u_out = 0.3*sin(u_time);
+u_out = 0.5*sin(8*u_time);
 
 sim('pendtemplate')
 %%
