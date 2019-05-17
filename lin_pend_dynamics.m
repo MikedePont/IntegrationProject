@@ -1,4 +1,4 @@
-function sys = lin_pend_dynamics(mc,mp,g,L,h,Km,d_cart,d_pend,vel_factor, angvel_factor)
+function [sys, sys_d] = lin_pend_dynamics(mc,mp,g,L,h,Km,d_cart,d_pend,vel_factor, angvel_factor)
 syms y1 y2 y3 y4 u
 
 dy(1,1) = y2;
@@ -14,5 +14,6 @@ B = double(subs(jacobian(dy,U),[U,V],zeros(1,5)));
 C = [1,0,0,0;0,0,1,0];
 D = 0;
 
-sys = ss(A,B,C,D);
-sys = c2d(sys,h);
+sys = ss(A,B,C,D,h);
+%sys_d = c2d(sys,h);
+sys_d = sys

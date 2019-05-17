@@ -28,13 +28,13 @@ u_out = 0.*u_time;
 x_init = zeros(4,1);
 sim('pendtemplate')
 
-%%
-T_final = 30;
+T_final = 15;
 
 x_init = [Pos_Pendulum.data(10),0,Angle_Pendulum.data(10),0];
-u_time = linspace(0,30,1000);
-u_out = 0.5*sin(8*u_time);
+u_time = 0:0.01:T_final;
+u_out = 0.5*sin(5*u_time);
 
 sim('pendtemplate')
+save('runs/last_run')
 %%
 save('runs/run_no_rod_1')
