@@ -1,26 +1,20 @@
-%clear all 
+% clear all 
 close all
 clc
 
-%% Parameters
-mc = 0.49;
-mp = 0.085;
-b = 0.1;
-L = 0.3;
-I = 1/3*mp*L^2;
-g = 9.81;
-h = 0.01;
-
+parameters
 %% Initialize x
 T_final = 1;
-% d_pend = 1;
-% d_cart = 1;
-% Km = 1;
-% Pc = 0;
-mtr_threshold = 0.15;
+
+d_pend = 0.01;
+d_cart = 1;
+Km = 1;
+ub_mtr_threshold = 0.16;
+lb_mtr_threshold = 0.02;
 
 u_time = linspace(0,h,2);
 u_out = 0.*u_time;
+amp_out = 0;
 x_init = zeros(4,1);
 
 sim('pendtemplate')
@@ -28,31 +22,84 @@ T_final = 30;
 
 x_init = [Pos_Pendulum.data(1),0,Angle_Pendulum.data(1),0];
 u_time = 0:h:T_final;
-% u_out = 0.4*sin(u_time);
-u_out = 0.4*sin(0.1*u_time.^2);
+% u_out = 0.4*sin(2*u_time);
+u_out = 0.5*sin(u_time.^2);%+0.05*sin(0.5*u_time);
+amp_out = 0.5;
 % u_out = 0.01*u_time;
 
 sim('pendtemplate')
 save('runs/last_run')
-% clear d_pend d_cart Km u_time
+
 %%
-[X,RESNORM,RESIDUAL,flag] = lsqnonlin(@(x)cart_par(x,mc,h),[10;10;0],[0;0;0],[]);
+[X,RESNORM,RESIDUAL,flag] = lsqnonlin(@(x)cart_par(x,h),[10;10;0.49],[0;0;0.4],[100;100;0.55]);
 d_cart = X(1);
 Km = X(2);
-Pc = X(3);
+mc = X(3);
 
-[~, y,out] = cart_par(X,mc,h);
+[~, y,out] = cart_par(X,h);
 plot(y(1,:))
 hold on
 plot(out.pos)
+
+legend('Estimated','Measured')
+hold off 
+%%
+X_2 = lsqnonlin(@(x)pend_par(x,mc,Km,d_cart,g,h),[0;0.085;0.6],[0;0.075;0.5],[5;0.1;0.7]);
+d_pend = X_2(1);
+mp = X_2(2);
+l = X_2(3);
+
+[~, y,angle] = pend_par(X_2,mc,Km,d_cart,g,h);
+plot(y(3,:))
+hold on
+plot(angle)
 legend('Estimated','Measured')
 hold off
+
 %%
-X = lsqnonlin(@(x)pend_par(x,mp,mc,Km,L,d_cart,g,h),1,0,[]);
-d_pend = X(1);
-% angvel_factor = X(2);
+T_final = 1;
+
+u_time = linspace(0,h,2);
+u_out = 0.*u_time;
+amp_out = 0;
+x_init = zeros(4,1);
+
+sim('pendtemplate')
+
+T_final = 30;
+
+x_init = [Pos_Pendulum.data(1),0,Angle_Pendulum.data(1),0];
+u_time = 0:h:T_final;
+% u_out = 0.4*sin(2*u_time);
+u_out = 0.5*sin(u_time.^2);%+0.05*sin(0.5*u_time);
+amp_out = 0.5;
+% u_out = 0.01*u_time;
+
+sim('pendtemplate')
+save('runs/last_run')
 %%
-[~, y,angle] = pend_par(X,mp,mc,Km,L,d_cart,g,h);
+[dsys,sys] = nl_pend_dynamics(mc,mp,g,l,d_cart,d_pend,Km,h);
+
+%%
+ref = 5;
+% Q = 10*eye(4);
+Q = diag([10;1;10;1]);
+R = 0.01;
+[K,S,E] = lqr(sys,Q,R);
+
+
+%%
+T_final = 15;
+sim('pendtemplate')
+
+
+%%
+X_2 = lsqnonlin(@(x)pend_par(x,mc,Km,d_cart,g,h),[0;0.085;0.6],[0;0.075;0.5],[5;0.1;0.7]);
+d_pend = X_2(1);
+mp = X_2(2);
+l = X_2(3);
+
+[~, y,angle] = pend_par(X_2,mc,Km,d_cart,g,h);
 plot(y(3,:))
 hold on
 plot(angle)

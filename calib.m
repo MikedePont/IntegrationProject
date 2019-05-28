@@ -19,6 +19,8 @@ adinoffangle = -mean(angle);
 
 f=fopen('hwinit.m','a');
 % pendulum 1
+
+
 %fprintf(f,'adinoffs = [0.033;%3.4f]; \n', adinoff);
 % pendulum 2
 fprintf(f,'\nadinoffs = [%3.4f;%3.4f];', adinoffcart, adinoffangle);
