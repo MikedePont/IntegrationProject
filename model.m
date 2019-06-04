@@ -44,12 +44,11 @@ plot(out.pos)
 legend('Estimated','Measured')
 hold off 
 %%
-X_2 = lsqnonlin(@(x)pend_par(x,mc,Km,d_cart,g,h),[0;0.085;0.6],[0;0.075;0.5],[5;0.1;0.7]);
+X_2 = lsqnonlin(@(x)pend_par(x,mc,Km,d_cart,g,h,l),[0.01;0.085],[0;0.075],[5;0.1]);
 d_pend = X_2(1);
 mp = X_2(2);
-l = X_2(3);
 
-[~, y,angle] = pend_par(X_2,mc,Km,d_cart,g,h);
+[~, y,angle] = pend_par(X_2,mc,Km,d_cart,g,h,l);
 plot(y(3,:))
 hold on
 plot(angle)
@@ -81,15 +80,31 @@ save('runs/last_run')
 [dsys,sys] = nl_pend_dynamics(mc,mp,g,l,d_cart,d_pend,Km,h);
 
 %%
-ref = 5;
-% Q = 10*eye(4);
-Q = diag([10;1;10;1]);
-R = 0.01;
-[K,S,E] = lqr(sys,Q,R);
+
+Q = 0.00001*eye(4);
+ Q(1,1) = 100;
+% Q(1,1) = 100;
+%  Q(3,3) = 100;
+R = 1;
+[K,S,E] = dlqr(dsys.A,dsys.B,Q,R,[]);
 
 
 %%
-T_final = 15;
+T_final = 1;
+
+u_time = linspace(0,h,2);
+u_out = 0.*u_time;
+amp_out = 0;
+x_init = zeros(4,1);
+kalman.R = 10;
+kalman.Q = 0.001;
+option = 0;
+sim('pendtemplate')
+
+
+x_init = [Pos_Pendulum.data(1),0,Angle_Pendulum.data(1),0];
+T_final = 40;
+option=1;
 sim('pendtemplate')
 
 
