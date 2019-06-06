@@ -2,7 +2,7 @@
 [dsys_mpc] = MPC_dsys(mc,mp,g,l,d_cart,d_pend,Km,h);
 
 Plant = tf(dsys_mpc);
-Ts = h;
+Ts = 0.01;
 p = 10;
 m = 2;
 w = [];
