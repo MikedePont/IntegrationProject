@@ -1,3 +1,4 @@
+
 function calib
 % calibration pendulum angle
 %hwinit;
@@ -25,5 +26,5 @@ f=fopen('hwinit.m','a');
 % pendulum 2
 fprintf(f,'\nadinoffs = [%3.4f;%3.4f];', adinoffcart, adinoffangle);
 fclose(f);
-
+end
 

@@ -1,15 +1,23 @@
-function [objfun,y,angle] = pend_par(x,mc,Km,d_cart,g,h,l)
+function [objfun,y,angle] = final_est(x,g,h,l)
 d_pend  = x(1);
 mp = x(2);
+Km = x(3);
+d_cart = x(4);
+mc = x(5);
 
 
-load('runs/stokje_laten_vallen_goede_3.mat', "Angle_Pendulum")
+load('runs/Sinus_good_2');
 
-angle = Angle_Pendulum.data(670:763);
-u = zeros(size(angle,1),1);
-%u = Voltage.data(670:763);
-dangle = (Angle_Pendulum.data(670)-Angle_Pendulum.data(669))/h;
-x0 = [0;0;angle(1);dangle];
+pos_x = states.data(:,1);
+angle_w = states.data(:,3);
+
+pos_cut = pos_x(1000:3000);
+angle_cut = angle_w(1000:3000);
+
+u = Voltage.data(1000:3000);
+dangle = (angle_cut(2)-angle_cut(1))/h;
+dpos = (pos_cut(2)-pos_cut(1))/h;
+x0 = [;dpos;angle(1);dangle];
 
 y(:,1) = x0;
 
