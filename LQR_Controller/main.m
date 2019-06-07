@@ -3,8 +3,13 @@
 close all
 clc
 warning off
+%% Calibrate cart
+h = 0.001;
+calib
 
+%% Load Parameters
 parameters
+
 %% Initialize cart
 T_final = 1;
 
@@ -26,8 +31,6 @@ x_init = [Pos_Pendulum.data(1),0,Angle_Pendulum.data(1),0];
 u_time = 0:h:T_final;
 % u_out = 0.4*sin(2*u_time);
 u_out = 0.5*sin(u_time.^2);%+0.05*sin(0.5*u_time);
-amp_out = 0.5;
-% u_out = 0.01*u_time;
 
 sim('pend_init_cart')
 save('cart_init')
@@ -40,7 +43,7 @@ mc = X(3);
 
 [~, y,out] = cart_par(X,h);
 plot(y(1,:))
-hold on
+hold on 
 plot(out.pos)
 legend('Estimated','Measured')
 hold off 
@@ -61,26 +64,34 @@ plot(angle)
 legend('Estimated','Measured')
 hold off
 
+VAF.angle = VaF(angle(1:end-1),y(3,:)');
+
 
 
 %% Make state space
 h = 0.001;
 [dsys,sys] = nl_pend_dynamics(mc,mp,g,l,d_cart,d_pend,Km,h);
 
+figure(1)
 bode(sys);
+
+figure(2)
 nyquist(dsys);
 
 
 %% Find LQR gains
 
-Q = eye(4);
+Q = 0.00001*eye(4);
 Q(1,1) = 500;
+% Q = blkdiag(500,100,1,1);
 R = 1;
 [K,S,E] = dlqr(dsys.A,dsys.B,Q,R,[]);
 
+
 dsys_cl = ss((dsys.A - dsys.B*K), zeros(4,1), dsys.C,dsys.D); 
 
-bode(dsys_cl);
+% figure(3)
+% nyquist(dsys_cl)
 %nyquist(dsys_cl);
 
 
@@ -89,7 +100,7 @@ bode(dsys_cl);
 
 T_final = 0.1;
 x_init = zeros(4,1);
-kalman.R = 0.001;
+kalman.R = 0.01;
 kalman.Q = 100;
 option = 0;
 sim('pend_LQR')
