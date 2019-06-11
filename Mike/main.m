@@ -1,5 +1,5 @@
 %% init
-clear all
+%         %clear all
 close all
 clc
 
@@ -14,12 +14,11 @@ Q(1,1) = 1;
 Q(3,3) = 100;
 R = 1;
 
-s = tf('s');
-     
+s = tf('s');    
 
-Ws = ss([50/(s+1),1]);
+Ws = ss(blkdiag((0.526*s+60.8)/(s+0.00608), (0.526*s+10)/(s+0.1)));
 
-Wu = ss(000.1/(s+1));
+Wu = 7;
 
 P11 = [Ws;0,0];
 P21 = eye(2);
@@ -32,7 +31,7 @@ P_min = minreal(ss(P));
 % [K,S,CLP] = dlqr(dsys.A,dsys.B,Q,R,[]);
 
 [K, CL,GAM] = hinfsyn(P_min,2,1);
-
+K_d = c2d(K,h);
 %% ARX
 T_final = 10;
 u_time = 0:h:T_final;
