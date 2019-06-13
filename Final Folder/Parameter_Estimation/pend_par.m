@@ -1,14 +1,37 @@
 function [objfun,y,angle] = pend_par(x,mc,Km,d_cart,g,l)
 d_pend  = x(1);
 mp = x(2);
+
+
 h = 0.01;
 
 load('fall_brown_rod.mat', "Angle_Pendulum")
+
 
 angle = Angle_Pendulum.data(670:763);
 u = zeros(size(angle,1),1);
 dangle = (Angle_Pendulum.data(670)-Angle_Pendulum.data(669))/h;
 x0 = [0;0;angle(1);dangle];
+
+%{
+h = 0.01;
+
+load('fall_blue_rod_2.mat', "Angle_Pendulum")
+
+angle = Angle_Pendulum.data(1060:1219)-Angle_Pendulum.data(1060);
+u = zeros(size(angle,1),1);
+dangle = (Angle_Pendulum.data(1059)-Angle_Pendulum.data(1060))/h;
+x0 = [0;0;angle(1);dangle];
+
+h = 0.001;
+load('fall_blue_rod.mat', "Angle_Pendulum")
+
+angle = Angle_Pendulum.data(28820:30250)-Angle_Pendulum.data(28820);
+u = zeros(size(angle,1),1);
+dangle = (Angle_Pendulum.data(28820)-Angle_Pendulum.data(28819))/h;
+x0 = [0;0;angle(1);dangle];
+%}
+
 
 y(:,1) = x0;
 
