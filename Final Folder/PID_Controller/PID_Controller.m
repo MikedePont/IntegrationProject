@@ -5,7 +5,7 @@ close all
 clc
 warning off
 
-load('../Parameter_Estimation/Parameter_est_brown_rod')
+load('../Parameter_Estimation/Parameter_est_brown_rod_7')
 open('pend_PID')
 
 %%

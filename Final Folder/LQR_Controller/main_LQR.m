@@ -4,26 +4,35 @@ close all
 clc
 warning off
 
-cd('H:\My Documents\Integration Project\Final Folder\LQR_Controller')
-load('../Parameter_Estimation/Parameter_est_brown_rod_7')
+% cd('H:\My Documents\Integration Project\Final Folder\LQR_Controller')
+load('../Parameter_Estimation/Parameter_est_brown_rod_7'); clear kalman
 open('pend_LQR')
 %% Find LQR gains
 
 Q = 0.00001*eye(4);
 Q(1,1) = 500;
 R = 1;
-[K,S,E] = dlqr(dsys.A,dsys.B,Q,R,[]);
+
+cov.R = 0.01;
+cov.Q = 100;
+
+[~,L,~] = kalman(dsys,cov.Q,cov.R*eye(2));
+
+[K_lqr,S,E] = dlqr(dsys.A,dsys.B,Q,R,[]);
+
+controller_LQG = ss(sys.A-sys.B*K_lqr-L*sys.C,L,-K_lqr,0);
+
+CL = feedback(eye(2),dsys*c2d(controller_LQG,h))
 
 
 dsys_cl = ss((dsys.A - dsys.B*K), zeros(4,1), dsys.C,dsys.D); 
 
-
+eig(CL)
 %% Run pendulum
 
 T_final = 0.1;
 x_init = zeros(4,1);
-kalman.R = 0.01;
-kalman.Q = 100;
+
 option = 0;
 sim('pend_LQR')
 

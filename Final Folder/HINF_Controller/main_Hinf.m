@@ -29,7 +29,7 @@ P_min = minreal(ss(P));
 
 % [K,S,CLP] = dlqr(dsys.A,dsys.B,Q,R,[]);
 
-[K, CL,GAM] = hinfsyn(P_min,2,1);
+[K, CL,GAM] = h2syn(P_min,2,1);
 K_d = c2d(K,h);
 
 %% 
